@@ -15,7 +15,7 @@ class ProductManager {
 
     getProductById = (id) => {
         const product = this.#product.find(item => item.id === id)
-        if (!product) return 'not found'
+        if (!product) return 'producto no encontrado'
         else return product
     }
 
