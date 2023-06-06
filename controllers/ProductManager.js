@@ -76,19 +76,6 @@ export default class ProductManager {
         this.#product = await this.getProduct();
       }
     }
-/*export const productManager = new ProductManager("./JSON/ProductManager.json");
-await productManager.addProduct('Top Loly', 'Top negro talle unico', 3500, '123', 2, 'https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1624963064-zara-cropped-top-negro-1624963028.jpg?crop=1xw:1xh;center,top&resize=480%3A%2A', "ropa", true)
-await productManager.addProduct('Top Luna', 'Top verde talle unico',3000, '124', 3, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZcGzMP7UT8zw8zJ2SkaOWJ2CNgZjPFZYQwA&usqp=CAU', "ropa", true) 
-await productManager.addProduct('Top Bimba', 'Top rosa talle unico', 4000, '125', 2, 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/top-zara-1616859543.jpg?resize=480:*', "ropa", true)
-console.log(productManager.getProductById(2))
-
-const updatedProduct = await productManager.updateProduct(2, { title: 'Top Lunar', price: 2500 });
-console.log(updatedProduct)
-
-const deleteProduct = await productManager.deleteProduct(2)
-console.log(deleteProduct)
-
-*/
 
 
 

@@ -5,9 +5,11 @@ import ProductManager from '../controllers/ProductManager.js';
 const router = Router();
 const app = express();
 
+
 app.use(express.json());
 
-const productManager = new ProductManager('./JSON/ProductManager.json');
+
+const productManager = new ProductManager('../JSON/ProductManager.json');
 
 const getProducts = async () => {
   await productManager.initialize();
