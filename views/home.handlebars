@@ -1,0 +1,15 @@
+<h1>Que nos ponemos hoy?</h1>
+<hr />
+ {{#each products }} 
+
+    <div>
+        <li>{{this.title}}</li>
+    </div>
+    <div>
+        {{this.description}}
+    </div>
+    <div>
+        {{this.price}}
+    </div>
+
+ {{/each}}

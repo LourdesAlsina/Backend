@@ -53,14 +53,10 @@ class CartManager {
 
   addProductsToCart = async (cartId, productId) => {
     let carts = await this.getCarts();
-
-    
     const cart = await this.getCartsById(cartId);
-
     if (!cart) {
       return null; 
     }
-
     const existingProduct = cart.products.find(
       (item) => item.product === productId
     );
@@ -74,18 +70,14 @@ class CartManager {
       cart.products.push(product);
     }
 
-    
     const cartIndex = carts.findIndex((item) => item.id === cartId);
     if (cartIndex !== -1) {
       carts[cartIndex] = cart;
     }
-
-    
     await fs.promises.writeFile(this.#path, JSON.stringify(carts, null, "\t"));
-
     return cart; 
   };
 }
 
-export const cartManager = new CartManager("./JSON/carts.json");
+export const cartManager = new CartManager("../JSON/carts.json");
 
