@@ -4,12 +4,10 @@ import fs from 'fs';
 export default class ProductManager {
   #product;
   #format;
-  #path;
-
-  constructor(path) {
-    this.#path = path;
-    this.#format = 'utf-8';
-    this.#product = [];
+    constructor(path) {
+      this.#path = path;
+      this.#format = 'utf-8';
+      this.#product = [];
   }
 
   isValid = (title, description, price, code, stock, thumbnail, category, status) => {

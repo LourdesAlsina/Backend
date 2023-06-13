@@ -1,15 +1,16 @@
 <h1>Que nos ponemos hoy?</h1>
-<hr />
- {{#each products }} 
-
+<div>       
+    {{#each products}}
     <div>
-        <li>{{this.title}}</li>
+        <p>{{this.id}}</p>
+        <div>
+            <h1>{{this.title}}</h1>
+            <p><b>Descripción:</b> {{this.description}}</p>
+            <p><b>Precio:</b> {{this.price}}</p>
+            <p><b>Categoria:</b> {{this.category}}</p>
+            <p><b>Stock:</b> {{this.stock}}</p>
+            <p><b>Código:</b> {{this.code}}</p>
+        </div>
     </div>
-    <div>
-        {{this.description}}
-    </div>
-    <div>
-        {{this.price}}
-    </div>
-
- {{/each}}
+    {{/each}}
+</div>
