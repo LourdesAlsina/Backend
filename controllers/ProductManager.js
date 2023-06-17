@@ -45,8 +45,8 @@ export default class ProductManager {
     return this.#product.length === 0 ? 1 : this.#product[this.#product.length - 1].id + 1;
   };
 
-  getProductById = id => {
-    const products = this.getProduct()
+  getProductById = async (id) => {
+    const products = await this.getProduct()
     const product = products.find(item => item.id === id);
     if (!product) return 'Producto no encontrado';
     else return product;
