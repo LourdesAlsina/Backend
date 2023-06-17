@@ -1,7 +1,6 @@
 import fs from "fs";
-import ProductManager from "./ProductManager";
+import { productManager } from "./ProductManager.js";
 
-const productManager = new ProductManager("../products.json")
 
 class CartManager {
   #path;
@@ -9,6 +8,7 @@ class CartManager {
   constructor(path) {
     this.#path = path;
     this.#format = "utf-8";
+    this.carts = [];
     
   }
 

@@ -1,45 +1,56 @@
 import express from 'express';
-import productRouter from './routers/product.router.js';
-import cartRouter from "./routers/carts.router.js";
 import handlebars from 'express-handlebars'
 import {Server} from 'socket.io'
-import ProductManager from './controllers/ProductManager.js';
+import __dirname, { PORT } from "./utils.js";
+import productRouter from './routers/product.router.js';
+import cartRouter from "./routers/carts.router.js";
 import viewsRouter from './routers/views.router.js';
 
+// Configuración
 const app = express();
-const PORT = 3000
 app.use(express.json());
-app.use(express.static('./public'))
-
+app.use(express.static(`${__dirname}/public`)) 
 const serverHttp = app.listen(PORT, () =>  console.log('Server up'));
 const io = new Server(serverHttp)
 app.set('socketio', io)
-
-
+//HANDLEBARS
 app.engine('handlebars', handlebars.engine())
-app.set('views', 'views')
-app.set('views engine', 'handlebars')
+app.set("views", `${__dirname}/views`);
+app.set("view engine", "handlebars");
+//HANDLEBARS
 
-app.get('/', (req, res) => {
-  res.send('<h1>Bienvenida a LOLA clothes</h1>');
+
+// Configuración
+
+// RUTAS
+//Principal
+app.get("/", (req, res) => res.render("index", {name:"Jorge"}))
+
+app.use('/api/products', productRouter);
+app.use("/api/carts", cartRouter);
+app.use('/home', viewsRouter)
+
+
+
+
+// Configuración
+// Evento de conexión de Socket.IO
+io.on("connection", socket => {
+  console.log("Successful Connection");
+  // Escucha el evento "productList" emitido por el cliente
+  socket.on("productList", data => {
+     // Emitir el evento "updatedProducts" a todos los clientes conectados
+    io.emit("updatedProducts", data);
+  });
 });
 
-app.use('/product', productRouter);
-app.use("/api/carts", cartRouter);
-app.use('products', viewsRouter)
-app.use('/', viewsRouter)
+// Configuración
 
-app.use((req, res, next) => {
-  req.io = io
-  next()
-})
-io.on("connection", socket => {
-  console.log('A new client has connected to the Server')
-  socket.on('productList',async(data) => {
-      let products = await ProductManager.addProducts(data)
-      io.emit('updatedProducts', products)
-  })
-})
+
+
+
+
+
 
 
 

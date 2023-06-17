@@ -4,8 +4,9 @@ import fs from 'fs';
 export default class ProductManager {
   #product;
   #format;
-    constructor(path) {
-      this.#path = path;
+  #path;
+    constructor() {
+      this.#path = "./JSON/ProductManager.json";
       this.#format = 'utf-8';
       this.#product = [];
   }
@@ -31,8 +32,9 @@ export default class ProductManager {
 
   getProduct = async () => {
     try {
-      const fileContent = await fs.promises.readFile(this.#path, this.#format);
-      return JSON.parse(fileContent);
+      return JSON.parse(
+        await fs.promises.readFile(this.#path, this.#format)
+      );
     } catch (error) {
       console.log('Error: archivo no encontrado');
       return [];
@@ -44,7 +46,8 @@ export default class ProductManager {
   };
 
   getProductById = id => {
-    const product = this.#product.find(item => item.id === id);
+    const products = this.getProduct()
+    const product = products.find(item => item.id === id);
     if (!product) return 'Producto no encontrado';
     else return product;
   };
@@ -86,4 +89,4 @@ export default class ProductManager {
   };
 }
 
-export const productManager = new ProductManager("../JSON/ProductManager.json");
+export const productManager = new ProductManager();

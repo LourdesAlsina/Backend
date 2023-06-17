@@ -2,8 +2,8 @@ import { Router } from 'express'
 import ProductManager from '../controllers/ProductManager.js';
 
 const viewsRouter = Router()
-const productManager = new ProductManager('./products.json')
-const readProducts = await productManager.readProducts()
+const productManager = new ProductManager('../products.json') // creo que no sriver
+const readProducts = await productManager.getProduct()
 
 viewsRouter.get('/', (req, res) => {
     res.render('home', {
@@ -13,7 +13,7 @@ viewsRouter.get('/', (req, res) => {
 })
 
 viewsRouter.get('/realTimeProducts', (req, res) => {
-    res.render('realTimeProducts', {
+    res.render('realTimeProduct', {
         title: "Handlebars | Websocket",
         products: readProducts
     })
