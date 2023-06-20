@@ -13,20 +13,17 @@ export default class ProductManager {
 
   isValid = (title, description, price, code, stock, thumbnail, category, status) => {
     let error = '';
-
     if (!title || !description || !price || !code || !stock || !thumbnail || !category || !status) {
       error = `[${title}] Campos incompletos`;
     } else {
       if (this.#product.length === 0) {
         return undefined;
       }
-
       const found = this.#product.find(item => item.code === code);
       if (found) {
         error = `[${title}] El código ya existe`;
       }
     }
-
     return error;
   };
 
@@ -53,8 +50,8 @@ export default class ProductManager {
   };
 
   addProduct = async (title, description, price, code, stock, thumbnail, category, status) => {
-    this.#product = await this.getProduct();
-    this.#product.push({
+    let productos = await this.getProduct();
+    let newProduct = {
       id: this.#generateId(),
       title,
       description,
@@ -64,9 +61,24 @@ export default class ProductManager {
       thumbnail,
       category,
       status
-    });
-    await fs.promises.writeFile(this.#path, JSON.stringify(this.#product, null, '\t'));
-    return this.#product[this.#product.length - 1];
+    }
+
+    //
+    const existingProduct = productos.find(
+      (prod) => prod.code === newProduct.code
+    );
+    if (existingProduct !== undefined) {
+      console.log("Ya existe un producto con el mismo código");
+      console.log(productos)
+      console.log("new product",newProduct)
+      console.log("existing product",existingProduct)
+      return false;
+    }
+    //
+
+    productos.push(newProduct);
+    await fs.promises.writeFile(this.#path, JSON.stringify(productos, null, '\t'));
+    return productos[productos.length - 1];
   };
 
   updateProduct = async (id, updatedFields) => {
