@@ -1,16 +1,19 @@
 <h1>Que nos ponemos hoy?</h1>
-<div>       
-    {{#each products}}
-    <div>
-        <p>{{this.id}}</p>
+    <div class="container">
+        <h2>Que nos ponemos hoy?</h2>
         <div>
-            <h1>{{this.title}}</h1>
-            <p><b>Descripción:</b> {{this.description}}</p>
-            <p><b>Precio:</b> {{this.price}}</p>
-            <p><b>Categoria:</b> {{this.category}}</p>
-            <p><b>Stock:</b> {{this.stock}}</p>
-            <p><b>Código:</b> {{this.code}}</p>
+            {{#each products}}
+            <div class="productContainer">
+                <p>{{this.id}}</p>
+                <div>
+                    <h1>{{this.title}}</h1>
+                    <p><b>Descripción:</b> {{this.description}}</p>
+                    <p><b>Precio:</b> {{this.price}}</p>
+                    <p><b>Categoria:</b> {{this.category}}</p>
+                    <p><b>Stock:</b> {{this.stock}}</p>
+                    <p><b>Código:</b> {{this.code}}</p>
+                </div>
+            </div>
+            {{/each}}
         </div>
     </div>
-    {{/each}}
-</div>
