@@ -27,6 +27,7 @@ export default class ProductManager {
     return error;
   };
 
+
   getProduct = async () => {
     try {
       return JSON.parse(
@@ -37,9 +38,23 @@ export default class ProductManager {
       return [];
     }
   };
+  #validateProduct = async (product) => {
+    const products = await this.getProduct();
+    const existingProduct = await products.find(
+      (prod) => prod.code === product.code
+    );
+    if (existingProduct !== undefined) {
+      console.log("Ya existe un producto con el mismo código");
+      return false;
+    }
 
-  #generateId = () => {
-    return this.#product.length === 0 ? 1 : this.#product[this.#product.length - 1].id + 1;
+    return true;
+  };
+
+
+  #generateId = async () => {
+    const products = await this.getProduct();
+    return products.length === 0 ? 1 : products[products.length - 1].id + 1;
   };
 
   getProductById = async (id) => {
@@ -49,38 +64,37 @@ export default class ProductManager {
     else return product;
   };
 
-  addProduct = async (title, description, price, code, stock, thumbnail, category, status) => {
-    let productos = await this.getProduct();
-    let newProduct = {
-      id: this.#generateId(),
+  addProduct = async (title, description, price, thumbnail, code, category, stock) => {
+    const products = await this.getProduct();
+
+    const newProduct = {
+      id: await this.#generateId(),
       title,
       description,
       price,
+      thumbnail: thumbnail || [],
       code,
-      stock,
-      thumbnail,
       category,
-      status
-    }
+      stock,
+      status: true,
+    };
 
-    //
-    const existingProduct = productos.find(
-      (prod) => prod.code === newProduct.code
-    );
-    if (existingProduct !== undefined) {
-      console.log("Ya existe un producto con el mismo código");
-      console.log(productos)
-      console.log("new product",newProduct)
-      console.log("existing product",existingProduct)
-      return false;
-    }
-    //
+  
+    if (await this.#validateProduct(newProduct)) {
+      products.push(newProduct)
+      await fs.promises.writeFile(
+        this.#path,
+        JSON.stringify(products, null, "\t")
+      );
 
-    productos.push(newProduct);
-    await fs.promises.writeFile(this.#path, JSON.stringify(productos, null, '\t'));
-    return productos[productos.length - 1];
+      
+      this.products = products;
+
+      return newProduct;
+    }
   };
 
+  
   updateProduct = async (id, updatedFields) => {
     this.#product = await this.getProduct();
     const productIndex = this.#product.findIndex(item => item.id === id);

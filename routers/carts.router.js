@@ -5,7 +5,7 @@ import { cartManager } from "../controllers/CartManager.js";
 const cartRouter = Router();
 
 cartRouter.post("/", async (req, res) => {
-  try {
+  try {    
     const addCart = await cartManager.addCart();
     res.json({ message: "Producto agregado al carrito", addCart });
   } catch (error) {

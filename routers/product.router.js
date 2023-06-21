@@ -39,40 +39,44 @@ router.get('/:pid', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const {
+    let {
       title,
       description,
       price,
+      thumbnail,
       code,
-      stock,
       category,
-      thumbnails,
+      stock,
+      status,
     } = req.body;
 
     if (!title || !description || !code || !price || !stock || !category) {
       return res
         .status(400)
-        .json({ error: 'Todos los campos son obligatorios' });
+        .json({ error: "Todos los campos son obligatorios" });
     }
 
-    const newProduct = await productManager.addProduct({
+    const addProduct = await productManager.addProduct(
       title,
       description,
       price,
+      thumbnail,
       code,
-      stock,
       category,
-      thumbnails,
-      status: true,
-    });
+      stock,
+      (status = true)
+    );
 
-    res.status(201).json({
-      message: 'Producto agregado exitosamente',
-      product: newProduct,
-    });
+    if (addProduct) {
+      return res.status(201).json({
+        message: "Producto agregado exitosamente",
+        product: addProduct,
+      });
+    }
+    return res.status(404).json({ error: "Error al agregar el producto" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Error en el servidor' });
+    return res.status(500).json({ error: "error en el servidor" });
   }
 });
 
@@ -107,6 +111,7 @@ router.put('/:pid', async (req, res) => {
 router.delete("/:pid", async (req, res) => {
   try {
     const productId = parseInt(req.params.pid);
+    const products = await productManager.getProduct();
 
     const productFind = await products.find((prod) => prod.id === productId);
 
