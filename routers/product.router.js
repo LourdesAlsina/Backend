@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import ProductManager from '../controllers/ProductManager.js';
+import { productModel } from '../models/product.models.js';
 
 const router = Router();
 const productManager = new ProductManager();
@@ -19,6 +20,28 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
+
+
+/*
+router.get('/', async (req, res) => {
+  try {
+      const product = await productModel.find()
+      res.json({ status: 'success', payload: cart })
+  } catch(err) {
+      res.status(500).json({ status: 'error', error: err.message })
+  }
+})
+
+router.post('/', async (req, res) => {
+  const product = req.body
+  try {
+      const result = await productModel.create(product)
+      res.json({ status: 'success', payload: result })
+  } catch(err) {
+      res.status(500).json({ status: 'error', error: err.message })
+  }
+})
+*/
 
 router.get('/:pid', async (req, res) => {
   try {

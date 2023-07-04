@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { cartManager } from "../controllers/CartManager.js";
+import { cartModel } from "../models/cart.models.js";
 
 
 const cartRouter = Router();
@@ -55,5 +56,25 @@ cartRouter.get("/:cid", async (req, res) => {
     return res.status(500).json({ error: "error en el servidor" });
   }
 });
+
+
+cartRouter.get('/', async (req, res) => {
+  try {
+      const users = await cartModel.find()
+      res.json({ status: 'success', payload: cart })
+  } catch(err) {
+      res.status(500).json({ status: 'error', error: err.message })
+  }
+})
+
+cartRouter.post('/', async (req, res) => {
+  const user = req.body
+  try {
+      const result = await userModel.create(cart)
+      res.json({ status: 'success', payload: result })
+  } catch(err) {
+      res.status(500).json({ status: 'error', error: err.message })
+  }
+})
 
 export default cartRouter;
