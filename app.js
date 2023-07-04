@@ -8,7 +8,7 @@ import viewsRouter from './routers/views.router.js';
 import userRouter from './routers/user.router.js'
 import mongoose from "mongoose"
 
-// Configuración
+
 const app = express();
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`)) 
@@ -19,10 +19,7 @@ app.set('socketio', io)
 app.engine('handlebars', handlebars.engine())
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
-//HANDLEBARS
 
-
-// Configuración
 
 // RUTAS
 //Principal
@@ -32,7 +29,6 @@ app.use('/api/products', productRouter);
 app.use("/api/carts", cartRouter);
 app.use('/home', viewsRouter)
 app.use('/users', userRouter)
-
 
 
 
@@ -53,15 +49,20 @@ io.on("connection", async (socket) => {
     io.emit("updatedProducts", data);
   });
 
-  let messages = (await messageModel.find()) ? await messageModel.find() : [];
+  try {
+    let messages = await messageModel.find();
 
-  socket.broadcast.emit("alerta");
-  socket.emit("logs", messages);
-  socket.on("message", (data) => {
-    messages.push(data);
-    messageModel.create(messages);
-    io.emit("logs", messages);
-  });
+    socket.broadcast.emit('alerta');
+    socket.emit('logs', messages);
+    socket.on('message', async (data) => {
+      messages.push(data);
+      await messageModel.create(data);
+      io.emit('logs', messages);
+    });
+  } catch (error) {
+    console.log(`Cannot connect to database: ${error}`);
+    process.exit();
+  }
 });
 
 

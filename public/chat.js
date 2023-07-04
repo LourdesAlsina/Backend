@@ -29,7 +29,7 @@ Swal.fire({
   });
 
   socket.on("logs", (data) => {
-    const divLogs = document.getElementById("messagesLogs");
+    const divLogs = document.getElementById("messages");
     let messages = "";
     data.reverse().forEach((message) => {
       messages += ` <div class="bg-secondary p-2 my-2 rounded-2">

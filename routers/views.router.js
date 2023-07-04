@@ -19,4 +19,14 @@ viewsRouter.get('/realTimeProducts', (req, res) => {
     })
 })
 
+viewsRouter.get("/chat", async (req, res) => {
+    try {
+      const messages = await messageModel.find().lean().exec();
+      res.render("chat", { messages });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error });
+    }
+  });
+
 export default viewsRouter
