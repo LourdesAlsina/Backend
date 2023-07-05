@@ -5,7 +5,6 @@ import __dirname, { PORT } from "./utils.js";
 import productRouter from './routers/product.router.js';
 import cartRouter from "./routers/carts.router.js";
 import viewsRouter from './routers/views.router.js';
-import userRouter from './routers/user.router.js'
 import mongoose from "mongoose"
 
 
