@@ -1,157 +1,96 @@
 import { Router } from 'express';
-import ProductManager from '../controllers/ProductManager.js';
 import { productModel } from '../models/product.models.js';
 
 const router = Router();
-const productManager = new ProductManager();
+
 
 router.get('/', async (req, res) => {
   try {
-    const products = await productManager.getProduct();
     const limit = req.query.limit;
+    const products = await productModel.find();
     if (limit) {
       const limitedProducts = products.slice(0, limit);
-      res.json({ productos: limitedProducts });
+      res.json(limitedProducts);
     } else {
-      res.json({ productos: products });
+      res.json({ products: products });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Error en el servidor' });
+    res.status(500).json({ status: "error", error: error.message });
   }
 });
 
-
-/*
-router.get('/', async (req, res) => {
-  try {
-      const product = await productModel.find()
-      res.json({ status: 'success', payload: cart })
-  } catch(err) {
-      res.status(500).json({ status: 'error', error: err.message })
-  }
-})
-
-router.post('/', async (req, res) => {
-  const product = req.body
-  try {
-      const result = await productModel.create(product)
-      res.json({ status: 'success', payload: result })
-  } catch(err) {
-      res.status(500).json({ status: 'error', error: err.message })
-  }
-})
-*/
 
 router.get('/:pid', async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid);
-    const product = await productManager.getProductById(productId);
-    console.log(product)
-    if (!product) {
-      return res.status(404).json({
-        error: `El producto con el id ${productId} no se ha encontrado`,
-      });
+    const pid = req.params.pid;
+    const product = await productModel.findById(pid);
+    if (product === null) {
+      return res.status(404).json({ error: `El producto no existe` });
     }
-    res.json({ product: product });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Error en el servidor' });
-  }
-});
-
-router.post('/', async (req, res) => {
-  try {
-    let {
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      category,
-      stock,
-      status,
-    } = req.body;
-
-    if (!title || !description || !code || !price || !stock || !category) {
-      return res
-        .status(400)
-        .json({ error: "Todos los campos son obligatorios" });
-    }
-
-    const addProduct = await productManager.addProduct(
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      category,
-      stock,
-      (status = true)
-    );
-
-    if (addProduct) {
-      return res.status(201).json({
-        message: "Producto agregado exitosamente",
-        product: addProduct,
-      });
-    }
-    return res.status(404).json({ error: "Error al agregar el producto" });
+    res.json({ payload: product });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "error en el servidor" });
   }
 });
 
+router.post("/", async (req, res) => {
+    try {
+      const product = req.body;
+      const addProduct = await productModel.create(product);
+      const products = await productModel.find().lean().exec();
+      req.app.get("socketio").emit("updatedProducts", products);
+      res.status(201).json({ status: "success", payload: addProduct });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: error.message });
+    }
+  });
+
 router.put('/:pid', async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid);
-    if (req.body.id !== productId && req.body.id !== undefined) {
+    const pid = req.params.pid;
+    if (req.body.id !== pid && req.body.id !== undefined) {
       return res
         .status(404)
-        .json({ error: 'No se puede modificar el id del producto' });
+        .json({ error: "No se puede modificar el id del producto" });
     }
-
     const updated = req.body;
-
-    const productFind = await productManager.getProductById(productId);
-
+    const productFind = await productModel.findById(pid);
     if (!productFind) {
-      return res
-        .status(404)
-        .json({ error: `No existe el producto con el id: ${productId}` });
+      return res.status(404).json({ error: `El producto no existe` });
     }
+    await productModel.updateOne({ _id: pid }, updated);
+    const updatedProducts = await productModel.find();
 
-    await productManager.updateProduct(productId, updated);
-
-    res.json({ message: `Actualizando el producto con el id: ${productId}` });
+    req.app.get("socketio").emit("updatedProducts", updatedProducts);
+    res.json({ message: `Actualizando el producto: ${productFind.title}` });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Error en el servidor' });
+    res.status(500).json({ error: error });
   }
 });
 
 router.delete("/:pid", async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid);
-    const products = await productManager.getProduct();
-
-    const productFind = await products.find((prod) => prod.id === productId);
-
-    if (!productFind) {
-      return res
-        .status(404)
-        .json({ error: `No existe el producto con el id: ${productId}` });
+    const productId = req.params.pid;
+    const result = await productModel.findByIdAndDelete(productId);
+    if (result === null) {
+      return res.status(404).json({
+        status: "error",
+        error: `No existe producto con id:  ${productId}`,
+      });
     }
-    const deleteProduct = await productManager.deleteProduct(productId);
-    console.log(deleteProduct);
-
+    const updatedProducts = await productModel.find().lean().exec();
+    req.app.get("socketio").emit("updatedProducts", updatedProducts);
     res.json({
-      message: `Producto con el id ${productId} eliminado con exito`,
+      message: `Producto  ${productId} eliminado`,
+      products: updatedProducts,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 });
 
