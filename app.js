@@ -8,7 +8,7 @@ import viewsRouter from './routers/views.router.js';
 import mongoose from "mongoose"
 import { messageModel } from './models/messages.models.js';
 import cookieParser from 'cookie-parse'
-
+import { productModel } from './models/product.models.js';
 
 
 const app = express();
