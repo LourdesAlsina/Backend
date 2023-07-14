@@ -99,17 +99,17 @@ const deleteProduct = async (id) => {
 socket.on("updatedProducts", (products) => {
   tbody.innerHTML = "";
 
-  products.forEach((item) => {
+  products.forEach((product) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-        <td>${item.title}</td>
-        <td>${item.description}</td>
-        <td>${item.price}</td>
-        <td>${item.code}</td>
-        <td>${item.category}</td>
-        <td>${item.stock}</td>
+        <td>${product.title}</td>
+        <td>${product.description}</td>
+        <td>${product.price}</td>
+        <td>${product.code}</td>
+        <td>${product.category}</td>
+        <td>${product.stock}</td>
         <td>
-          <button class="btn btn-danger" onclick="deleteProduct('${item._id}')" id="btnDelete">Delete</button>
+          <button class="btn btn-danger" onclick="deleteProduct('${product._id}')" id="btnDelete">Delete</button>
         </td>
       `;
     tbody.appendChild(row);
