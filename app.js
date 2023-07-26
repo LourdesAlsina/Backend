@@ -6,13 +6,19 @@ import productRouter from './routers/product.router.js';
 import cartRouter from "./routers/carts.router.js";
 import viewsRouter from './routers/views.router.js';
 import mongoose from "mongoose"
-import { messageModel } from './models/messages.models.js';
-import cookieParser from 'cookie-parse'
-import { productModel } from './models/product.models.js';
+import { messageModel } from './Dao/fsManagers/models/messages.models.js';
+//import cookieParser from 'cookie-parse'
+import { productModel } from './Dao/fsManagers/models/product.models.js';
+import session from 'express-session'
 
 
 const app = express();
 app.use(express.json());
+app.use(session({
+  secret: 'lolasecret',
+  resave: true,
+  saveUninitialized: true
+}))
 
 mongoose.set('strictQuery', false)
 try {

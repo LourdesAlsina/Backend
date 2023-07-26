@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import ProductManager from '../controllers/ProductManager.js';
+import ProductManager from '../Dao/fsManagers/ProductManager.js';
 
 const viewsRouter = Router()
 const productManager = new ProductManager('../products.json') // creo que no sriver
