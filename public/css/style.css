@@ -150,3 +150,124 @@ input[type="text"] {
     background-color: #fff;
     overflow-y: scroll;
 }
+
+/* LOGIN */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0e8dc; 
+  color: #333; 
+}
+
+.login-title {
+  color: #ffadad; 
+  text-align: center;
+}
+
+.login-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8edeb; 
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.login-text {
+  text-align: center;
+  color: #f77e7e; 
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ffb6b9; 
+  border-radius: 5px;
+}
+
+.input-field[type="email"],
+.input-field[type="password"] {
+  width: 100%;
+}
+
+.btn {
+  padding: 10px;
+  background-color: #a4ebf3; 
+  border: none;
+  border-radius: 5px;
+  color: #333; 
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #bde0f6; 
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* REGISTER */
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0e8dc; 
+  color: #333; 
+}
+
+.registration-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8edeb; 
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ffb6b9; 
+  border-radius: 5px;
+}
+
+.input-field[type="text"],
+.input-field[type="email"],
+.input-field[type="number"],
+.input-field[type="password"] {
+  width: 100%;
+}
+
+.btn {
+  padding: 10px;
+  background-color: #a4ebf3; 
+  border: none;
+  border-radius: 5px;
+  color: #333; 
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #bde0f6; 
+}
+
+.btn-block {
+  width: 100%;
+}
+

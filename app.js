@@ -10,15 +10,31 @@ import { messageModel } from './Dao/fsManagers/models/messages.models.js';
 //import cookieParser from 'cookie-parse'
 import { productModel } from './Dao/fsManagers/models/product.models.js';
 import session from 'express-session'
+import { FileStore } from 'session-file-store';
+import MongoStore from 'connect-mongo'
+import passport from 'passport'
+import initializePassport from './config/passport.js'
 
 
 const app = express();
 app.use(express.json());
-app.use(session({
-  secret: 'lolasecret',
-  resave: true,
-  saveUninitialized: true
-}))
+app.use(express.urlencoded({ extended: true }))
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: MONGO_URI,
+      dbName: MONGO_DB_NAME,
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+    }),
+    secret: "Secret", // Cambia esto por una cadena secreta para firmar las cookies
+    resave: false,
+    saveUninitialized: true,
+  })
+)
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 mongoose.set('strictQuery', false)
 try {
@@ -41,6 +57,7 @@ try {
   app.use('/api/products', productRouter);
   app.use("/api/carts", cartRouter);
   app.use('/home', viewsRouter)
+  app.use("/session", sessionsRouter)
 
 
 

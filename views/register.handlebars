@@ -1,0 +1,34 @@
+<h1 class="login-title">Registro</h1>
+
+  {{>errors}}
+
+ <div>
+      <div>
+        <div>
+          <div>
+                <div class="registration-container">
+                    <form action="/session/register" method="POST" class="registration-form">
+                        <div>
+                            <input type="text" name="first_name" id="first_name" class="input-field" placeholder="Name" value="{{first_name}}" required>
+                        </div>
+                        <div>
+                            <input type="text" name="last_name" id="last_name" class="input-field" placeholder="Last Name" value="{{last_name}}" required>
+                        </div>
+                        <div>
+                            <input type="email" name="email" id="email" class="input-field" placeholder="Email" value="{{email}}" required>
+                        </div>
+                        <div>
+                            <input type="number" name="age" id="age" class="input-field" placeholder="Age" value="{{age}}" required>
+                        </div>
+                        <div>
+                            <input type="password" name="password" id="password" class="input-field" placeholder="Password" required>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-success btn-block">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
