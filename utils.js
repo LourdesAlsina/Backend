@@ -8,6 +8,7 @@ const __dirname = dirname(__filename);
 export const PORT = 3000;
 
 export default __dirname;
+
 export const createHash = password => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
     }

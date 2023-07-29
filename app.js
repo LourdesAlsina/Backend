@@ -5,6 +5,8 @@ import __dirname, { PORT } from "./utils.js";
 import productRouter from './routers/product.router.js';
 import cartRouter from "./routers/carts.router.js";
 import viewsRouter from './routers/views.router.js';
+import chatRouter from './routers/chat.router.js';
+import sessionsRouter from './routes/sessions.router.js';
 import mongoose from "mongoose"
 import { messageModel } from './Dao/fsManagers/models/messages.models.js';
 //import cookieParser from 'cookie-parse'
@@ -27,14 +29,18 @@ app.use(
       dbName: MONGO_DB_NAME,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     }),
-    secret: "Secret", // Cambia esto por una cadena secreta para firmar las cookies
+    secret: "Secret", 
     resave: false,
     saveUninitialized: true,
   })
 )
+
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+
+const MONGO_URI = "mongodb://127.0.0.1:27017"
+const MONGO_DB_NAME = "Ecommerce"
 
 mongoose.set('strictQuery', false)
 try {
@@ -57,7 +63,8 @@ try {
   app.use('/api/products', productRouter);
   app.use("/api/carts", cartRouter);
   app.use('/home', viewsRouter)
-  app.use("/session", sessionsRouter)
+  app.use("/sessions", sessionsRouter)
+  app.use("/api/chat", chatRouter)
 
 
 

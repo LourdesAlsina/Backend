@@ -43,15 +43,17 @@ router.post('/register', async (req, res) => {
       res.redirect('login')
       
   }
-
-
 })
 
-router.post('/login', passport.authenticate('login', { failureRedirect: '/session/login'}), async (req, res) => {
+router.post('/login', passport.authenticate('login', { failureRedirect: '/sessions/login'}), async (req, res) => {
   const { email } = req.body;
   const user = await UserModel.findOne({ email: email });
   req.session.user = user
   res.redirect('/products')
+})
+
+router.get('/failLogin', (req, res) => {
+  res.send({ error: 'Failed!'})
 })
 
 router.get('/logout', (req, res) => {
@@ -59,16 +61,26 @@ router.get('/logout', (req, res) => {
       if(err) {
           console.log(err);
           res.status(500).render('errors/base', {error: err})
-      } else res.redirect('/session/login')
+      } else res.redirect('/sessions/login')
   })
+})
+
+router.get("/login", (req, res) => {
+  res.render("sessions/login");
 })
 
 router.get("/register", (req, res) => {
   res.render("sessions/register");
 })
+router.get('/failRegister', (req, res) => {
+  res.send({ error: 'Faileed!'})
+})
 
-router.get("/login", (req, res) => {
-  res.render("sessions/login");
+
+
+router.get("/github", (req, res) => {
+  passport.authenticate('github', {scope: ['user:email']}),
+  async(req, res) => {}
 })
 
 
