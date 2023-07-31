@@ -3,6 +3,7 @@ import local from 'passport-local'
 import UserModel from '../Dao/fsManagers/models/user.model'
 import { createHash, isValidPassword } from '../utils.js'
 import GitHubStrategy from 'passport-github2'
+import bcrypt from "bcrypt";
 
 const localStrategy = local.Strategy
 
@@ -23,19 +24,18 @@ const initializePassport = () => {
             const newUser = {
                 first_name, last_name, email, age, password: createHash(password)
             }
-            const result = await UserModel.create(newUser)
-            return done(null, result)
-        } catch(err) {
-            return done('error al obtener el user')
-        }
-    }))
-    
-    passport.use('github', new GitHubStrategy({
-        clientID: 'Iv1.efc0db9e62c3023b',
-        clientSecret: '7364d7ea4dad99d5e3295fdb30aba6c5c48dccc7',
-        callbackURL: 'http://localhost:3000/api/sessions/githubcallback',
-    }, async(accessToken, refreshToken, profile, done)=> {
-        console.log(profile)
+            if (
+                newUser.email === "lolaFlores@gmail.com" &&
+                bcrypt.compareSync("lola12345", newUser.password)
+              ) {
+                newUser.role = "Admin";
+              }
+              const result = await userModel.create(newUser);
+              return done(null, result);
+            } catch (error) {
+              console.log(error);
+              return done('Error al crear el usuario: ' + error.message);
+            }
     }))
 
     passport.use('login', new localStrategy({
@@ -57,6 +57,32 @@ const initializePassport = () => {
     }))
 
 } 
+
+passport.use('github', new GitHubStrategy({
+    clientID: 'Iv1.efc0db9e62c3023b',
+    clientSecret: '7364d7ea4dad99d5e3295fdb30aba6c5c48dccc7',
+    callbackURL: 'http://localhost:3000/api/sessions/githubcallback',
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        const userName = profile.displayName || profile.username;
+        const userEmail = profile._json.email;
+
+        const existingUser = await UserModel.findOne({ email: userEmail });
+        if (existingUser) return done(null, existingUser);
+        const newUser = {
+            first_name: userName,
+            last_name: " ",
+            email: userEmail,
+            password: " ",
+        };
+        const result = await userModel.create(newUser);
+        return done(null, result);
+    } catch (error) {
+        console.log(error);
+        return done("Error");
+    }
+}));
+
 
 passport.serializeUser((user, done) => {
     done(null, user._id)
