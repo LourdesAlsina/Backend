@@ -1,0 +1,46 @@
+<table>
+  <thead>
+    <tr>
+      <th class="table-row">Title</th>
+      <th class="table-row">Description</th>
+      <th class="table-row">Price</th>
+      <th class="table-row">Code</th>
+      <th class="table-row">Category</th>
+      <th class="table-row">Stock</th>
+      <th class="table-row">Actions</th>
+    </tr>
+  </thead>
+  <tbody id="tbody">
+    {{#each payload}}
+    <tr>
+      <td class="table-row">{{this.title}}</td>
+      <td class="table-row">{{this.description}}</td>
+      <td class="table-row">{{this.price}}</td>
+      <td class="table-row">{{this.code}}</td>
+      <td class="table-row">{{this.category}}</td>
+      <td class="table-row">{{this.stock}}</td>
+        <td>
+        {{#if showDeleteButton}}
+          <button onclick="deleteProduct('{{this._id}}')" id="btnDelete"><i class="fa-sharp fa-solid fa-trash"></i></button>
+          <button><i class="fa-solid fa-pen"></i></button>
+        {{else}}
+          <button  onclick="addProductToCart('{{this._id}}')" ><i class="fa-solid fa-cart-shopping"></i></button>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<div class="pagination">
+{{#if hasPrevPage}}
+    <a href="{{prevLink}}" class="prev-link btn btn-primary m-3"><i class="fa-solid fa-arrow-left"></i> Anterior</a>
+  {{/if}}
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}" class="next-link btn btn-primary m-3">Siguiente <i class="fa-solid fa-arrow-right"></i></a>
+  {{/if}}
+</div>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/js/cart.js"></script>

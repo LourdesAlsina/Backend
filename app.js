@@ -3,7 +3,7 @@ import handlebars from 'express-handlebars'
 import {Server} from 'socket.io'
 import __dirname, { PORT } from "./utils.js";
 import mongoose from "mongoose"
-//import cookieParser from 'cookie-parse'
+import cookieParser from 'cookie-parse'
 import { productModel } from './Dao/fsManagers/models/product.models.js';
 import session from 'express-session'
 import { FileStore } from 'session-file-store';
@@ -20,6 +20,7 @@ app.engine('handlebars', handlebars.engine())
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
 app.use(express.static(`${__dirname}/public`)) 
+app.use(cookieParser())
 
 app.use(
   session({
@@ -28,7 +29,7 @@ app.use(
       dbName: MONGO_DB_NAME,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     }),
-    secret: "Secret", 
+    secret: SESSION_SECRET_KEY, 
     resave: false,
     saveUninitialized: true,
   })

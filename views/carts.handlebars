@@ -1,0 +1,33 @@
+<h2>Productos del carrito id = {{this.cid}}</h2>
+
+      <table class="table-container">
+        <thead class="table-title">
+          <tr>
+            <td class="table-row">Producto</td>
+            <td class="table-row">Descripcion</td>
+            <td class="table-row">Precio</td>
+            <td class="table-row">Codigo</td>
+            <td class="table-row">Stock</td>
+            <td class="table-row">Cantidad</td>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          {{#each products}}
+          <tr>
+            <td class="table-row">{{this.product.title}}</td>
+            <td class="table-row">{{this.product.description}}</td>
+            <td class="table-row">{{this.product.price}}</td>
+            <td class="table-row">{{this.product.code}}</td>
+            <td class="table-row">{{this.product.stock}}</td>
+            <td class="table-row">{{this.quantity}}</td>
+            <td class="table-row">
+              <button  onclick="removeProductFromCart('{{this.product._id}}')"><i class="fa-sharp fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/cart.js"></script>
