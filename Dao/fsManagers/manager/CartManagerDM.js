@@ -1,5 +1,5 @@
 import { cartModel } from "../models/cart.models";
-import ProductManager from "../ProductManager";
+import ProductManager from "./ProductManager";
 
 class CartManager {
 

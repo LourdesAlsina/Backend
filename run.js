@@ -4,6 +4,8 @@ import viewsRouter from './routers/views.router.js';
 import chatRouter from './routers/chat.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import { messageModel } from './Dao/fsManagers/models/messages.models.js';
+import { socketServerConnection } from './socketServer.js'
+import { passportCall } from './utils.js';
 
 const run = (io, app) => {
     app.use((req, res, next) => {
@@ -16,6 +18,10 @@ app.use("/api/carts", cartRouter);
 app.use('/home', viewsRouter)
 app.use("/sessions", sessionsRouter)
 app.use("/api/chat", chatRouter)
+app.use("/api/carts", passportCall("jwt"), CartRouter);
+app.use("/products", passportCall("jwt"), viewsRouter);
+
+socketServerConnection()
 
 io.on("connection", async (socket) => {
     console.log("Successful Connection");

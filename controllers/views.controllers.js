@@ -1,5 +1,5 @@
 import productModel from "../Dao/fsManagers/models/product.models";
-import cartModel from "../Dao/fsManagers/Mongo/CartManagerDM"
+import cartModel from "../Dao/fsManagers/manager/CartManagerDM"
 import messageModel from "../Dao/fsManagers/models/messages.models"
 
 export const productsViewController = async (req, res) => {
