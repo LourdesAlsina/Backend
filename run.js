@@ -6,6 +6,7 @@ import sessionsRouter from './routes/sessions.router.js';
 import { messageModel } from './Dao/fsManagers/models/messages.models.js';
 import { socketServerConnection } from './socketServer.js'
 import { passportCall } from './utils.js';
+import LoggerRouter from './router/logger.routes.js'
 
 const run = (io, app) => {
     app.use((req, res, next) => {
@@ -20,6 +21,7 @@ app.use("/sessions", sessionsRouter)
 app.use("/api/chat", chatRouter)
 app.use("/api/carts", passportCall("jwt"), CartRouter);
 app.use("/products", passportCall("jwt"), viewsRouter);
+app.use("/logger", LoggerRouter)
 
 socketServerConnection()
 
